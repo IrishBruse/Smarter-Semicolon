@@ -1,7 +1,8 @@
-# Change Log
-All notable changes to the "smartsemicolon" extension will be documented in this file.
+# Changelog
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+> 1.1.0 (Intial)
 
-## [Unreleased]
-- Initial release
+- Added Multi-line support
+- Added Disabled languages
+- Added fallback on cstyle insertion
+  - should no longer need to add languages that are similar to c

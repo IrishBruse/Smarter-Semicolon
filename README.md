@@ -1,8 +1,22 @@
-# Smart Semicolon Extension
+<div align="center">
+    <img src="https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/icon.png">
+    <h1>Smarter Semicolon</h1>
+</div>
+
+# Smarter Semicolon Extension
 
 This extension places semicolons at the end of an expression.
 
-![Basic Feature](https://raw.githubusercontent.com/seunghwanh/vscode-smartsemicolon/master/images/basic_feature.gif)
+![Basic Feature](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/basic_feature.gif)
+
+## Multi-line (New)
+
+This extension allows you to add in semicolons using multiple cursors all using the smart detection.
+
+
+## Excluded Languages (New)
+
+This extension allows you to specify which language to stop you from putting in semi-colons as usual tho you can toggle it and it will allow you to normally insert the semi-colon again. Useful for languages like python where muscle memory kicks in when you dont want it to.
 
 ## Semantic Detection
 
@@ -10,15 +24,16 @@ This extension detects line comments and language brackets and configures the en
 
 Line Detection
 
-![Line Comment Detection](https://raw.githubusercontent.com/seunghwanh/vscode-smartsemicolon/master/images/line_comment_detection.gif)
+![Line Comment Detection](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/line_comment_detection.gif)
 
 Bracket Detection
 
-![Bracket Detection](https://raw.githubusercontent.com/seunghwanh/vscode-smartsemicolon/master/images/bracket_detection.gif)
+![Bracket Detection](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/bracket_detection.gif)
+
 
 ## Automatic Line Change
 
-![Auto Line Change Basic](https://raw.githubusercontent.com/seunghwanh/vscode-smartsemicolon/master/images/auto_line_change_basic.gif)
+![Auto Line Change Basic](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/auto_line_change_basic.gif)
 
 When enabled, this extension automatically inserts a new line below the current cursor and put the cursor at the beginning of the new line on a semicolon key. The exceptions are when:
 
@@ -30,6 +45,9 @@ When enabled, this extension automatically inserts a new line below the current 
 In case you don't want the newly-inserted line, simply putting another semicolon will cancel the insertion, and the cursor goes back to the previous position.
 
 ## Supported Languages
+- Fallsback on c style if language is not known (New)
+- Rust (New)
+- JavascriptReact, TypescriptReact (New)
 - C#
 - C/C++
 - Java
@@ -39,30 +57,9 @@ In case you don't want the newly-inserted line, simply putting another semicolon
 
 ## Extension Settings
 
-* `smartsemicolon.enable`: toggle this extension on/off.
-* `smartsemicolon.autoLineChange`: toggle the automatic line changing feature on/off.
-* `smartsemicolon.acceptSuggestions`: If true, accept the current IntelliSense suggestion on a semicolon.
-* `smartsemicolon.showInStatusBar`: toggle the extension information on the status bar.
-* `smartsemicolon.deleteEmptyLine`: toggle deleting an empty line if the cursor is at the line and the user pressed a semicolon.
-
-## Known Issues
-
-- Cannot detect multi-lined comments. To insert a semicolon inside a multi-lined comment, users must manually toggle the extension off.
-- Users must provide information about languages where this extension will take actions. Currently, extensions cannot retrieve language configurations from the Visual Studio Code.
-
-### 1.0.0
-
-Initial release 
-
-### 1.0.3
-
-- Supports C#, C/C++, Java, Javascript/Typescript, Go, ShaderLab languages by default.
-- `smartsemicolon.languages` settings removed.
-- No duplicate semicolons
-
-### 1.0.4
-
-- Supports multi-cursor editing.
-- `smartsemicolon.acceptSuggestions` settings added.
-- `smartsemicolon.showInStatusBar` settings added.
-- `smartsemicolon.deleteEmptyLine` settings added.
+* `smartersemicolon.enable`: Toggle this extension on/off.
+* `smartersemicolon.autoLineChange`: Toggle the automatic line changing feature on/off.
+* `smartersemicolon.acceptSuggestions`: If true, accept the current IntelliSense suggestion on a semicolon.
+* `smartersemicolon.showInStatusBar`: Toggle the extension information on the status bar.
+* `smartersemicolon.deleteEmptyLine`: Toggle deleting an empty line if the cursor is at the line and the user pressed a semicolon.
+* `smartersemicolon.languageExclusions`: Languages to disable the extension in will not place a semicolon in these langauges as long as its enabed with `smartersemicolon.enable`

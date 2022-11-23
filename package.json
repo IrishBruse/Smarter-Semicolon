@@ -1,12 +1,19 @@
 {
-    "name": "smartsemicolon",
-    "displayName": "Smart semicolon",
-    "description": "Smart semicolon placement",
-    "version": "1.0.4",
-    "publisher": "monolith",
-    "author": "Monolith",
+    "name": "smartersemicolon",
+    "displayName": "Smarter semicolon",
+    "description": "Smarter semicolon placement",
+    "version": "1.1.0",
+    "publisher": "irishbruse",
+    "author": "Ethan Conneely",
+    "maintainers": [
+        "IrishBruse",
+        "Monolith(old)"
+    ],
+    "icon": "images/icon.png",
+    "license": "MIT",
+    "homepage": "https://github.com/IrishBruse/Smarter-Semicolon",
     "engines": {
-        "vscode": "^1.11.0"
+        "vscode": "^1.66.0"
     },
     "categories": [
         "Other"
@@ -14,96 +21,121 @@
     "keywords": [
         "semicolon",
         "smart semicolon",
+        "smarter semicolon",
         "smart",
+        "smarter",
+        "utility",
         "colonize"
     ],
-    "icon": "images/icon.png",
-    "license": "SEE LICENSE IN LICENSE.md",
-    "homepage": "https://github.com/seunghwanh/smartsemicolon-vscode",
     "repository": {
         "type": "git",
-        "url": "https://github.com/seunghwanh/smartsemicolon-vscode.git"
+        "url": "https://github.com/IrishBruse/Smarter-Semicolon.git"
     },
     "bugs": {
-        "url": "https://github.com/seunghwanh/smartsemicolon-vscode/issues"
+        "url": "https://github.com/IrishBruse/Smarter-Semicolon/issues"
     },
     "activationEvents": [
         "*"
     ],
-    "main": "./out/src/extension",
+    "main": "./dist/extension.js",
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "compile-tests": "tsc -p . --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",
+        "pretest": "npm run compile-tests && npm run compile && npm run lint",
+        "lint": "eslint src --ext ts"
+    },
+    "devDependencies": {
+        "vscode": "^1.0.0",
+        "@types/glob": "^8.0.0",
+        "@types/mocha": "^10.0.0",
+        "@types/node": "18.x",
+        "@types/vscode": "^1.73.1",
+        "@typescript-eslint/eslint-plugin": "^5.44.0",
+        "@typescript-eslint/parser": "^5.44.0",
+        "@vscode/test-electron": "^2.2.0",
+        "eslint": "^8.28.0",
+        "glob": "^8.0.3",
+        "mocha": "^10.1.0",
+        "ts-loader": "^9.4.1",
+        "typescript": "^4.9.3",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.0"
+    },
     "contributes": {
         "configuration": {
             "properties": {
-                "smartsemicolon.enable": {
+                "smartersemicolon.enable": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable the extension."
                 },
-                "smartsemicolon.autoLineChange": {
+                "smartersemicolon.autoLineChange": {
                     "type": "boolean",
                     "default": true,
                     "description": "Automatically insert a new line below and set the cursor at the beginning on a semicolon key."
                 },
-                "smartsemicolon.acceptSuggestions": {
+                "smartersemicolon.acceptSuggestions": {
                     "type": "boolean",
                     "default": true,
                     "description": "Accept the current suggestion from the IntelliSense when a semicolon is inserted."
                 },
-                "smartsemicolon.showInStatusBar": {
+                "smartersemicolon.showInStatusBar": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Display the extension information in the status bar."
                 },
-                "smartsemicolon.deleteEmptyLine": {
+                "smartersemicolon.deleteEmptyLine": {
                     "type": "boolean",
                     "default": true,
                     "description": "Deletes the current cursor line on semicolon if the line is empty."
+                },
+                "smartersemicolon.languageExclusions": {
+                    "type": "array",
+                    "description": "Languages to disable the extension in.",
+                    "items": {
+                        "type": "string",
+                        "uniqueItems": true
+                    },
+                    "default": [
+                        "python",
+                        "lua",
+                        "json",
+                        "yaml",
+                        "markdown"
+                    ]
                 }
             }
         },
         "commands": [
             {
-                "command": "smartsemicolon.insert",
+                "command": "smartersemicolon.insert",
                 "title": "Insert",
                 "category": "Smart Semicolon"
             },
             {
-                "command": "smartsemicolon.toggle",
+                "command": "smartersemicolon.toggle",
                 "title": "Toggle",
                 "category": "Smart Semicolon"
             },
             {
-                "command": "smartsemicolon.toggleAutoLineChange",
+                "command": "smartersemicolon.toggleAutoLineChange",
                 "title": "Toggle Automatic Line Change",
                 "category": "Smart Semicolon"
             }
         ],
         "keybindings": [
             {
-                "command": "smartsemicolon.insert",
+                "command": "smartersemicolon.insert",
                 "key": ";"
             },
             {
-                "command": "smartsemicolon.toggle",
-                "key": "shift+ctrl+alt+o"
-            },
-            {
-                "command": "smartsemicolon.toggleAutoLineChange",
-                "key": "shift+ctrl+alt+l"
+                "command": "smartersemicolon.toggle",
+                "key": "ctrl+;"
             }
         ]
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
     }
 }
