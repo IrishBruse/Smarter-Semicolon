@@ -1,10 +1,7 @@
-'use strict';
-
 import { Position, CharacterPair, TextLine, TextDocument } from "vscode";
 
-export class LanguageParser
+export default class LanguageParser
 {
-
     private lineComment: string;
     private brackets: CharacterPair;
     private exceptionKeywords: string[];

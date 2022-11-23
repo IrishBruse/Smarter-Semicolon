@@ -1,15 +1,28 @@
-'use strict';
+import { commands, ExtensionContext, Position, Range, Selection, TextDocument, TextEditor, TextEditorEdit, TextLine, window, workspace } from "vscode";
+import LanguageParser from "./languageParser";
 
-import { commands, ExtensionContext, Position, Range, Selection, StatusBarAlignment, StatusBarItem, TextDocument, TextEditor, TextEditorEdit, TextLine, window, workspace } from "vscode";
+let enable: boolean;
+let autoLineChange: boolean;
+let acceptSuggestions: boolean;
+let deleteEmptyLine: boolean;
 
-import { LanguageParser } from "./languageParser";
+const clangFamilyParser = new LanguageParser('//', ['{', '}'], ['for'], ['return', 'throw', 'continue', 'break']);
+const languageParsers = new Map<string, LanguageParser | null>(
+    [
+        ['c', clangFamilyParser],
+        ['cpp', clangFamilyParser],
+        ['csharp', clangFamilyParser],
+        ['java', clangFamilyParser],
+        ['javascript', clangFamilyParser],
+        ['typescript', clangFamilyParser],
+        ['javascriptreact', clangFamilyParser],
+        ['typescriptreact', clangFamilyParser],
+        ['rust', clangFamilyParser],
+    ]
+);
 
 export function activate(context: ExtensionContext)
 {
-    statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right);
-    statusBarItem.command = 'smartersemicolon.toggleAutoLineChange';
-    context.subscriptions.push(statusBarItem);
-
     context.subscriptions.push(workspace.onDidChangeConfiguration(updateConfiguration));
     context.subscriptions.push(workspace.onDidChangeTextDocument(updateConfiguration));
 
@@ -52,33 +65,45 @@ async function insert()
         await commands.executeCommand('acceptSelectedSuggestion')
     }
 
-    await doInsert(editor, document, parser);
+    await smartInsert(editor, document, parser);
 }
 
-async function doInsert(editor: TextEditor, document: TextDocument, parser: LanguageParser)
+async function smartInsert(editor: TextEditor, document: TextDocument, parser: LanguageParser)
 {
     const newSelections: Selection[] = [];
     const selectionCount = editor.selections.length;
     let wasDelete = false;
 
-    await editor.edit((editBuilder) =>
+    await editor.edit((text) =>
     {
         for (let selection of editor.selections)
         {
             const line = document.lineAt(selection.active.line);
             if (line.isEmptyOrWhitespace && deleteEmptyLine)
             {
-                newSelections.push(deleteLine(editBuilder, document, line, selection));
+                newSelections.push(deleteLine(text, document, line, selection));
                 wasDelete = true;
                 continue;
             }
 
-            let position = parser ? parser.getSemicolonPosition(line, selection.active) : getLineEndPosition(line);
-            if (position.character == 0 || line.text.charAt(position.character - 1) != ';')
+            let sameLineCursors = editor.selections.filter((select, _, __) => document.lineAt(select.active.line).lineNumber == line.lineNumber && select != selection);
+
+            let position;
+            if (sameLineCursors.length == 0)
             {
-                editBuilder.insert(position, ';');
+                position = parser ? parser.getSemicolonPosition(line, selection.active) : getLineEndPosition(line);
+                if (position.character == 0 || line.text.charAt(position.character - 1) != ';')
+                {
+                    text.insert(position, ';');
+                }
+                position = position.translate(0, 1);
             }
-            position = position.translate(0, 1);
+            else
+            {
+                position = selection.active;
+                text.insert(selection.active, ';');
+                position = position.translate(0, 1 + sameLineCursors.filter((select) => select.start.character < selection.start.character).length);
+            }
             newSelections.push(new Selection(position, position));
         }
     })
@@ -146,11 +171,11 @@ function getLineEndPosition(line: TextLine): Position
 
 function normalInsert(editor: TextEditor)
 {
-    editor.edit((editBuilder) =>
+    editor.edit((text) =>
     {
         for (let selection of editor.selections)
         {
-            editBuilder.insert(selection.active, ';');
+            text.insert(selection.active, ';');
         }
     });
 }
@@ -159,14 +184,12 @@ function toggle()
 {
     enable = !enable;
     workspace.getConfiguration('smartersemicolon').update('enable', enable, true);
-    updateStatusBarItem();
 }
 
 function toggleAutoLineChange()
 {
     autoLineChange = !autoLineChange;
     workspace.getConfiguration('smartersemicolon').update('autoLineChange', autoLineChange, true);
-    updateStatusBarItem();
 }
 
 function updateConfiguration()
@@ -175,7 +198,6 @@ function updateConfiguration()
 
     autoLineChange = config.get('autoLineChange')!;
     acceptSuggestions = config.get('acceptSuggestions')!;
-    showInStatusBar = config.get('showInStatusBar')!;
     deleteEmptyLine = config.get('deleteEmptyLine')!;
     let excludedLanguages = config.get<Array<string>>('languageExclusions')!;
 
@@ -183,49 +205,4 @@ function updateConfiguration()
     {
         languageParsers.set(lang, null);
     }
-
-    updateStatusBarItem();
 }
-
-function updateStatusBarItem()
-{
-    if (autoLineChange)
-    {
-        statusBarItem.text = statusBarItemTitle + ' $(arrow-down)';
-    }
-    else
-    {
-        statusBarItem.text = statusBarItemTitle;
-    }
-
-    if (enable && showInStatusBar)
-    {
-        statusBarItem.show();
-    }
-    else
-    {
-        statusBarItem.hide();
-    }
-}
-
-let enable: boolean;
-let autoLineChange: boolean;
-let acceptSuggestions: boolean;
-let showInStatusBar: boolean;
-let deleteEmptyLine: boolean;
-
-let statusBarItem: StatusBarItem;
-
-const clangFamilyParser = new LanguageParser('//', ['{', '}'], ['for'], ['return', 'throw', 'continue', 'break']);
-const languageParsers = new Map<string, LanguageParser | null>();
-languageParsers.set('c', clangFamilyParser);
-languageParsers.set('cpp', clangFamilyParser);
-languageParsers.set('csharp', clangFamilyParser);
-languageParsers.set('java', clangFamilyParser);
-languageParsers.set('javascript', clangFamilyParser);
-languageParsers.set('typescript', clangFamilyParser);
-languageParsers.set('javascriptreact', clangFamilyParser);
-languageParsers.set('typescriptreact', clangFamilyParser);
-languageParsers.set('rust', clangFamilyParser);
-
-const statusBarItemTitle = 'Smart Semicolon';

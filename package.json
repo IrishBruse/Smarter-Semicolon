@@ -1,8 +1,8 @@
 {
     "name": "smartersemicolon",
-    "displayName": "Smarter semicolon",
+    "displayName": "Smarter Semicolon",
     "description": "Smarter semicolon placement",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "publisher": "irishbruse",
     "author": "Ethan Conneely",
     "maintainers": [
@@ -35,7 +35,7 @@
         "url": "https://github.com/IrishBruse/Smarter-Semicolon/issues"
     },
     "activationEvents": [
-        "*"
+        "onStartupFinished"
     ],
     "main": "./dist/extension.js",
     "scripts": {
@@ -75,18 +75,13 @@
                 },
                 "smartersemicolon.autoLineChange": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Automatically insert a new line below and set the cursor at the beginning on a semicolon key."
                 },
                 "smartersemicolon.acceptSuggestions": {
                     "type": "boolean",
                     "default": true,
                     "description": "Accept the current suggestion from the IntelliSense when a semicolon is inserted."
-                },
-                "smartersemicolon.showInStatusBar": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Display the extension information in the status bar."
                 },
                 "smartersemicolon.deleteEmptyLine": {
                     "type": "boolean",
@@ -101,6 +96,7 @@
                         "uniqueItems": true
                     },
                     "default": [
+                        "go",
                         "python",
                         "lua",
                         "json",
