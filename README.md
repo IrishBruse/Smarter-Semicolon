@@ -12,24 +12,16 @@ This extension places semicolons at the end of an expression.
 ## Multi-line (New)
 
 This extension allows you to add in semicolons using multiple cursors all using the smart detection.
+![Multi-line](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/multi_line.gif)
 
 
 ## Excluded Languages (New)
 
-This extension allows you to specify which language to stop you from putting in semi-colons as usual tho you can toggle it and it will allow you to normally insert the semi-colon again. Useful for languages like python where muscle memory kicks in when you dont want it to.
+This extension allows you to specify which language to stop you from putting in semi-colons. Useful for languages like python where muscle memory kicks in when you dont want it to.
 
 ## Semantic Detection
 
 This extension detects line comments and language brackets and configures the end of the current expression.
-
-Line Detection
-
-![Line Comment Detection](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/line_comment_detection.gif)
-
-Bracket Detection
-
-![Bracket Detection](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/bracket_detection.gif)
-
 
 ## Automatic Line Change
 
