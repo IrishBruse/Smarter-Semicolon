@@ -12,6 +12,7 @@ This extension places semicolons at the end of an expression.
 ## Multi-line (New)
 
 This extension allows you to add in semicolons using multiple cursors all using the smart detection.
+
 ![Multi-line](https://raw.githubusercontent.com/IrishBruse/Smarter-Semicolon/main/images/multi_line.gif)
 
 
@@ -52,6 +53,5 @@ In case you don't want the newly-inserted line, simply putting another semicolon
 * `smartersemicolon.enable`: Toggle this extension on/off.
 * `smartersemicolon.autoLineChange`: Toggle the automatic line changing feature on/off.
 * `smartersemicolon.acceptSuggestions`: If true, accept the current IntelliSense suggestion on a semicolon.
-* `smartersemicolon.showInStatusBar`: Toggle the extension information on the status bar.
 * `smartersemicolon.deleteEmptyLine`: Toggle deleting an empty line if the cursor is at the line and the user pressed a semicolon.
 * `smartersemicolon.languageExclusions`: Languages to disable the extension in will not place a semicolon in these langauges as long as its enabed with `smartersemicolon.enable`
