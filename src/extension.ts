@@ -196,6 +196,7 @@ function updateConfiguration()
 {
     const config = workspace.getConfiguration('smartersemicolon');
 
+    enable = config.get('enable')!;
     autoLineChange = config.get('autoLineChange')!;
     acceptSuggestions = config.get('acceptSuggestions')!;
     deleteEmptyLine = config.get('deleteEmptyLine')!;
